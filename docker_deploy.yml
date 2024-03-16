@@ -1,0 +1,50 @@
+- name: Install Docker prerequisites and Python modules
+  hosts: linux
+  become: yes
+  tasks:
+    - name: Install yum-utils
+      ansible.builtin.package:
+        name: yum-utils
+        state: present
+
+    - name: Add Docker's official repository
+      ansible.builtin.command: 
+        cmd: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+    - name: Install Docker CE packages
+      ansible.builtin.package:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+        state: present
+
+    - name: Install Pip
+      ansible.builtin.package:
+        name: python3-pip
+        state: present
+
+    - name: Install Docker Python module
+      ansible.builtin.pip:
+        name: docker
+        state: present
+
+- name: Deploy Apache Docker Container
+  hosts: localhost
+  become: yes
+  tasks:
+    - name: Pull Apache Docker image
+      ansible.builtin.docker_image:
+        name: httpd
+        source: pull
+
+    - name: Run Apache Docker container
+      ansible.builtin.docker_container:
+        name: apache_container
+        image: httpd
+        state: started
+        ports:
+          - "80:80"
+
