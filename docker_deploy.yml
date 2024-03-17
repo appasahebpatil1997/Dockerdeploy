@@ -7,11 +7,5 @@
       docker_image:
         name: httpd
         state: present
-
-    - name: Run Apache container
-      docker_container:
-        name: my-apache
-        image: httpd
-        ports:
-          - "80:80"  # Map container port 80 to host port 80
-        restart: always
+        # Add the source parameter here
+        source: https://hub.docker.com/library/httpd
