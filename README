@@ -10,3 +10,6 @@ yum install ansible-------#cd /etc/ansible
 
 to run the playbook
 ansible-playbook {filename}.yml
+
+###Ensure you have sufficient requirement and python dependensies on all machines#####
+python --version {should be more than 3.0}
