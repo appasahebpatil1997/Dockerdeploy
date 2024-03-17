@@ -1,0 +1,12 @@
+---
+- name: Run Apache container
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Run Apache container
+      docker_container:
+        name: my_apache_container
+        image: httpd:latest
+        state: started
+        ports:
+          - "80:80"
