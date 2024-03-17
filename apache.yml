@@ -1,11 +1,15 @@
-- name: Install httpd
-  yum:
-    name: httpd
-    state: present
+---
+- name: Apache Installation and Service Start
+  hosts: your_target_hosts
   become: yes
+  tasks:
+    - name: Install httpd
+      yum:
+        name: httpd
+        state: present
 
-- name: Start the httpd service
-  service:
-    name: httpd
-    state: started
-    enabled: yes
+    - name: Start the httpd service
+      service:
+        name: httpd
+        state: started
+        enabled: yes
