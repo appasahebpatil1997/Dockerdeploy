@@ -1,17 +1,13 @@
 ---
 - name: Deploy Apache Docker container
-  hosts: all
-  become: true
+  hosts: localhost
+  become: yes
   tasks:
-    - name: Pull Apache httpd image
-      docker_image:
-        name: httpd
-        state: present
-
     - name: Run Apache container
       docker_container:
-        name: my-apache
-        image: httpd
+        name: my_apache_container
+        image: httpd:latest
+        state: started
+        restart_policy: always
         ports:
-          - "80:80"  # Map container port 80 to host port 80
-        restart: always
+          - "80:80"
