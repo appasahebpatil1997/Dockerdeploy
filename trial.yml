@@ -32,13 +32,33 @@
         state: started
         enabled: yes
 
-- name: Run Docker container for Apache
+- name: Changing Docker daemon configuration file network
   hosts: localhost
   tasks:
-    - name: Run Docker container for Apache
-      docker_container:
-        name: apache_container
-        image: httpd:2.4
-        ports:
-          - "8080:80"
+    - name: Modify Docker daemon configuration for network
+      copy:
+        content: |
+          {
+            "bip": "172.168.10.1/30"
+          }
+        dest: /etc/docker/daemon.json
+      notify: restart docker
+
+- name: Start Docker service
+  hosts: localhost
+  tasks:
+    - name: Start Docker service
+      service:
+        name: docker
         state: started
+
+- name: Deploy Apache Docker container
+  hosts: localhost
+  tasks:
+    - name: Run Apache Docker container
+      docker_container:
+        name: apache
+        image: httpd:latest
+        state: started
+        ports:
+          - "80:80"
