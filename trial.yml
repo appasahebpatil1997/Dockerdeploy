@@ -47,7 +47,6 @@
             "bip": "172.168.10.1/30"
           }
         dest: /etc/docker/daemon.json
-      notify: restart docker
 
 - name: Start Docker service
   hosts: localhost
