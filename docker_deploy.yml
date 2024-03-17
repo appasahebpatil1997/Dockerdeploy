@@ -7,5 +7,4 @@
       docker_image:
         name: httpd
         state: present
-        # Add the source parameter here
-        source: https://hub.docker.com/library/httpd
+        source: pull  # Set source to pull
