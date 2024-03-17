@@ -1,15 +1,8 @@
 ---
-- name: Apache Installation and Service Start
-  hosts: your_target_hosts
-  become: yes
+- name: Pull httpd Docker image
+  hosts: localhost
   tasks:
-    - name: Install httpd
-      yum:
+    - name: Pull httpd image
+      docker_image:
         name: httpd
-        state: present
-
-    - name: Start the httpd service
-      service:
-        name: httpd
-        state: started
-        enabled: yes
+        source: pull
