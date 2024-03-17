@@ -1,6 +1,6 @@
 ---
-- name: Ensure Docker is installed and running
-  hosts: localhost
+- name: Install Docker
+  hosts: all
   become: yes
   tasks:
     - name: Install required packages for Docker
@@ -27,7 +27,7 @@
         state: present
 
     - name: Start and enable Docker service
-      service:
+      systemd:
         name: docker
         state: started
         enabled: yes
@@ -49,7 +49,7 @@
         dest: /etc/docker/daemon.json
 
     - name: Reload Docker daemon
-      service:
+      systemd:
         name: docker
         state: reloaded
 
