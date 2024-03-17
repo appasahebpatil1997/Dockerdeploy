@@ -35,7 +35,12 @@
 - name: Changing Docker daemon configuration file network
   hosts: localhost
   tasks:
-    - name: Modify Docker daemon configuration for network
+    - name: Create Docker configuration directory
+      file:
+        path: /etc/docker
+        state: directory
+
+    - name: Configure Docker daemon network
       copy:
         content: |
           {
@@ -57,8 +62,8 @@
   tasks:
     - name: Run Apache Docker container
       docker_container:
-        name: apache
-        image: httpd:latest
+        name: "apache"
+        image: "httpd:latest"
         state: started
         ports:
           - "80:80"
