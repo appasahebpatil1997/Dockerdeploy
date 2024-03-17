@@ -1,8 +1,44 @@
-tasks:
-  - name: Run Docker container for Apache
-    docker:
-      name: appaapache
-      image: httpd:2.4
-      ports:
-        - "8080:80"
-      state: started
+---
+- name: Install Docker
+  hosts: all
+  become: yes
+  tasks:
+    - name: Install required packages for Docker
+      package:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - yum-utils
+        - device-mapper-persistent-data
+        - lvm2
+
+    - name: Add Docker repository
+      yum_repository:
+        name: docker-ce-stable
+        description: Docker CE Stable - $basearch
+        baseurl: https://download.docker.com/linux/centos/9/$basearch/stable
+        gpgcheck: yes
+        gpgkey: https://download.docker.com/linux/centos/gpg
+        enabled: yes
+
+    - name: Install Docker
+      package:
+        name: docker-ce
+        state: present
+
+    - name: Start and enable Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+- name: Run Docker container for Apache
+  hosts: localhost
+  tasks:
+    - name: Run Docker container for Apache
+      docker_container:
+        name: apache_container
+        image: httpd:2.4
+        ports:
+          - "8080:80"
+        state: started
