@@ -1,13 +1,10 @@
----
-- name: Deploy Apache Docker container
-  hosts: localhost
-  become: yes
-  tasks:
-    - name: Run Apache container
-      docker_container:
-        name: my_apache_container
-        image: httpd:latest
-        state: started
-        restart_policy: always
-        ports:
-          - "80:80"
+- name: Install httpd
+  yum:
+    name: httpd
+    state: present
+    become: true
+-name: start the service
+  service:
+      name: httpd
+      state: enabled
+      enabled: yes
