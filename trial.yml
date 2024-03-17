@@ -1,5 +1,5 @@
 ---
-- name: Install Docker
+- name: Install Docker and run Apache container
   hosts: all
   become: yes
 
@@ -32,3 +32,11 @@
         name: docker
         state: started
         enabled: yes
+
+    - name: Run Apache Docker container
+      docker_container:
+        name: apache_container
+        image: httpd:latest
+        state: started
+        ports:
+          - "80:80"
