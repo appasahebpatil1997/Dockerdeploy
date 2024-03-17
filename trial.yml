@@ -48,13 +48,10 @@
           }
         dest: /etc/docker/daemon.json
 
-- name: Start Docker service
-  hosts: localhost
-  tasks:
-    - name: Start Docker service
+    - name: Reload Docker daemon
       service:
         name: docker
-        state: started
+        state: reloaded
 
 - name: Deploy Apache Docker container
   hosts: localhost
