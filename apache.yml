@@ -2,9 +2,10 @@
   yum:
     name: httpd
     state: present
-    become: true
--name: start the service
+  become: yes
+
+- name: Start the httpd service
   service:
-      name: httpd
-      state: enabled
-      enabled: yes
+    name: httpd
+    state: started
+    enabled: yes
