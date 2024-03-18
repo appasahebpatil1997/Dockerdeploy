@@ -4,12 +4,16 @@ pre-requisites for CentOS 7
 ansible-galaxy collection install community.docker
 curl -sSL https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 python get-pip.py
+yum install python3
 yum update for all the nodes
+####install ansible#####
 yum install epel-release
 yum install ansible-------#cd /etc/ansible
 
 to run the playbook
 ansible-playbook {filename}.yml
+edit the yml file before running to specify the host in use###
+vi {filename.yml}
 
 ###Ensure you have sufficient requirement and python dependensies on all machines#####
 python --version {should be more than 3.0}
