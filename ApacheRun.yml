@@ -20,12 +20,7 @@
         gpgcheck: yes
         gpgkey: https://download.docker.com/linux/centos/gpg
         enabled: yes
-
-    - name: Install Docker
-      package:
-        name: docker-ce
-        state: present
-
+        
     - name: Start and enable Docker service
       systemd:
         name: docker
