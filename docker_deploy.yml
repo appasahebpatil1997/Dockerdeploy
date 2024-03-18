@@ -1,34 +1,10 @@
----
-- name: Install Docker
+- name: Install Docker using yum
   hosts: all
   become: yes
-
   tasks:
-    - name: Install required packages for Docker
-      package:
-        name: "{{ item }}"
-        state: present
-      loop:
-        - yum-utils
-        - device-mapper-persistent-data
-        - lvm2
-
-    - name: Add Docker repository
-      yum_repository:
-        name: docker-ce-stable
-        description: Docker CE Stable - $basearch
-        baseurl: https://download.docker.com/linux/centos/9/$basearch/stable
-        gpgcheck: yes
-        gpgkey: https://download.docker.com/linux/centos/gpg
-        enabled: yes
-
-    - name: Install Docker
-      package:
-        name: docker-ce
-        state: present
-
-    - name: Start and enable Docker service
-      service:
+    - name: Install Docker using yum
+      yum:
         name: docker
-        state: started
-        enabled: yes
+        state: present
+      vars:
+        ansible_become_password: "sudo password of user {masteer node}"
