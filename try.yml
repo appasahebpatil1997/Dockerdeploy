@@ -1,0 +1,10 @@
+---
+- name: Update YUM packages
+  hosts: linux
+  become: yes  # This ensures running commands with sudo privileges
+
+  tasks:
+    - name: Run yum update
+      yum:
+        name: '*'
+        state: latest
