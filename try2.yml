@@ -1,0 +1,17 @@
+---
+- name: Run Apache Docker container
+  hosts: localhost
+  tasks:
+    - name: Pull Apache Docker image
+      docker_image:
+        name: httpd
+        tag: 2.2
+        source: pull
+
+    - name: Run Apache Docker container
+      docker_container:
+        name: apache_container
+        image: httpd:2.2
+        state: started
+        ports:
+          - "80:80"
