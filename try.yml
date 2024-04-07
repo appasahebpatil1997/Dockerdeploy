@@ -43,10 +43,11 @@
           }
         dest: /etc/docker/daemon.json
 
-    - name: Reload Docker daemon
+    - name: Reload systemd daemon
+      become: yes
       systemd:
-        name: docker
-        state: restarted
+        daemon_reexec: yes
+
 
 - name: Deploy Apache Docker container
   hosts: localhost
