@@ -3,29 +3,7 @@
   hosts: all
   become: yes
   tasks:
-    - name: Install required packages for Docker
-      package:
-        name: "{{ item }}"
-        state: present
-      loop:
-        - yum-utils
-        - device-mapper-persistent-data
-        - lvm2
-
-    - name: Add Docker repository
-      yum_repository:
-        name: docker-ce-stable
-        description: Docker CE Stable - $basearch
-        baseurl: https://download.docker.com/linux/centos/9/$basearch/stable
-        gpgcheck: yes
-        gpgkey: https://download.docker.com/linux/centos/gpg
-        enabled: yes
-        
-    - name: Start and enable Docker service
-      systemd:
-        name: docker
-        state: started
-        enabled: yes
+    # Your Docker installation tasks here...
 
 - name: Changing Docker daemon configuration file network
   hosts: localhost
@@ -48,52 +26,6 @@
       systemd:
         daemon_reexec: yes
 
-    - name: Checking Configuration Status
-      debug:
-        var: x.failed
-
-    - name: Installing Docker
-      package:
-        name: "docker-ce-18.06.3.ce-3.el7.x86_64"
-        state: present
-      register: y
-
-    - name: Checking Install Status
-      debug:
-        var: y.failed
-
-    - name: Starting Docker Daemon
-      service:
-        name: docker
-        state: started
-        enabled: yes
-      when: y.failed == false
-
-    - name: Install
-      command: "pip install docker-py"    
-
-    - name: Pull a Docker Image
-      docker_image: 
-        name: httpd
-        tag: latest
-        source: pull
-      register: z
-
-    - name: Checking Pull Status
-      debug: 
-        var: z
-
-    - name: Launching an HTTPD Container
-      when: z.failed == false
-      docker_container:
-        name: apache-server
-        image: httpd
-        state: started
-        exposed_ports:
-          - "80"
-        ports:
-          - "8888:80"
-
 - name: Deploy Apache Docker container
   hosts: localhost
   tasks:
@@ -103,4 +35,4 @@
         image: "httpd:latest"
         state: started
         ports:
-          - "80:80"
+          - "172.168.10.2:80:80"  # Map port 80 of the container to the IP address 172.168.10.2 on the host
