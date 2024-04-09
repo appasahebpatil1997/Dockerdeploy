@@ -1,61 +1,39 @@
----
-- name: Install Docker
-  hosts: all
-  become: yes
+- name: Install Docker and deploy Apache container on Linux
+  hosts: linux
+  become: true
   tasks:
-    - name: Install required packages for Docker
-      package:
+    - name: Install Docker
+      apt:
         name: "{{ item }}"
         state: present
       loop:
-        - yum-utils
-        - device-mapper-persistent-data
-        - lvm2
+        - docker.io
+        - docker-compose
+      tags:
+        - docker
 
-    - name: Add Docker repository
-      yum_repository:
-        name: docker-ce-stable
-        description: Docker CE Stable - $basearch
-        baseurl: https://download.docker.com/linux/centos/8/$basearch/stable
-        gpgcheck: yes
-        gpgkey: https://download.docker.com/linux/centos/gpg
-        enabled: yes
-        
-    - name: Start and enable Docker service
-      systemd:
-        name: docker
-        state: started
-        enabled: yes
-
-- name: Changing Docker daemon configuration file network
-  hosts: localhost
-  tasks:
-    - name: Create Docker configuration directory
-      file:
-        path: /etc/docker
-        state: directory
-
-    - name: Configure Docker daemon network
+    - name: Changing Docker daemon configuration file network
       copy:
         content: |
           {
             "bip": "172.168.10.1/30"
           }
         dest: /etc/docker/daemon.json
+      notify: restart docker
 
-    - name: Reload systemd daemon
-      become: yes
-      systemd:
-        daemon_reexec: yes
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+      tags:
+        - docker
 
-
-- name: Deploy Apache Docker container
-  hosts: localhost
-  tasks:
-    - name: Run Apache Docker container
+    - name: Deploy Apache Docker container
       docker_container:
         name: "apache"
         image: "httpd:latest"
         state: started
         ports:
-          - "80:80"
+          - 80:80
+      tags:
+        - docker
