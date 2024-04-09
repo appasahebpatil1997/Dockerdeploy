@@ -37,3 +37,9 @@
           - 80:80
       tags:
         - docker
+
+  handlers:
+    - name: restart docker
+      service:
+        name: docker
+        state: restarted
