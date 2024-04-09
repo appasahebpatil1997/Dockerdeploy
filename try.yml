@@ -1,8 +1,6 @@
 - name: Install Docker and deploy Apache container on CentOS 7
-  hosts: linux
+  hosts: localhost
   become: true
-  vars:
-    ansible_python_interpreter: /usr/bin/python  # Use Python 2 interpreter
   tasks:
     - name: Install Docker and Docker Compose
       yum:
@@ -36,7 +34,7 @@
         image: "httpd:latest"
         state: started
         ports:
-          - 80:80
+          - "80:80"
       tags:
         - docker
 
