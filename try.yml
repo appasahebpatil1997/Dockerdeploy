@@ -1,13 +1,13 @@
-- name: Install Docker and deploy Apache container on Linux
+- name: Install Docker and deploy Apache container on CentOS 7
   hosts: linux
   become: true
   tasks:
-    - name: Install Docker
-      apt:
+    - name: Install Docker and Docker Compose
+      yum:
         name: "{{ item }}"
         state: present
       loop:
-        - docker.io
+        - docker
         - docker-compose
       tags:
         - docker
