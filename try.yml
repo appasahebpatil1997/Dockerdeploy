@@ -5,7 +5,7 @@
     ansible_python_interpreter: /usr/bin/python3  # Adjust the path based on your Python interpreter location
   tasks:
     - name: Install Docker and Docker Compose
-      yum:
+      dnf:
         name: "{{ item }}"
         state: present
       loop:
