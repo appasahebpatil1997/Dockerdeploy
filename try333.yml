@@ -1,38 +1,44 @@
+# deploy_apache_container.yml
+
 - name: Deploy Apache container using Docker
   hosts: localhost
+  become: true
   tasks:
     - name: Install Docker dependencies
-      apt:
+      yum:
         name: "{{ item }}"
         state: present
       with_items:
-        - apt-transport-https
-        - ca-certificates
-        - curl
-        - gnupg-agent
-        - software-properties-common
-
-    - name: Add Docker GPG key
-      apt_key:
-        url: https://download.docker.com/linux/ubuntu/gpg
-        state: present
+        - yum-utils
+        - device-mapper-persistent-data
+        - lvm2
 
     - name: Add Docker repository
-      apt_repository:
-        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
-        state: present
+      yum_repository:
+        name: docker-ce-stable
+        description: Docker CE Stable - $basearch
+        baseurl: https://download.docker.com/linux/centos/7/$basearch/stable
+        gpgcheck: yes
+        enabled: yes
+        gpgkey: https://download.docker.com/linux/centos/gpg
 
     - name: Install Docker
-      apt:
+      yum:
         name: docker-ce
         state: present
 
-    - name: Install Docker Python module
-      apt:
-        name: python3-pip
+    - name: Start and enable Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Install Python pip
+      yum:
+        name: python-pip
         state: present
 
-    - name: Install Docker module
+    - name: Install Docker Python module
       pip:
         name: docker
 
