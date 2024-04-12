@@ -1,5 +1,5 @@
 ---
-- name: Install Docker and Apache using Yum
+- name: Install Docker and Docker dependencies
   hosts: all
   become: yes
 
@@ -18,9 +18,41 @@
           - docker-ce
           - docker-ce-cli
           - containerd.io
-          - docker-buildx-plugin
-          - docker-compose-plugin
         state: present
 
+    - name: Install Docker plugins
+      command: yum install -y docker-buildx-plugin docker-compose-plugin
+      args:
+        creates: /usr/bin/docker-buildx
+
+- name: Run Apache container
+  hosts: localhost
+  tasks:
     - name: Start Apache container
-      command: docker run -d --name apache -p 80:80 httpd
+      docker_container:
+        name: apache
+        image: httpd
+        state: started
+        restart_policy: always
+        ports:
+          - "80:80"
+
+- name: Create Docker network
+  hosts: localhost
+  tasks:
+    - name: Create Docker network
+      docker_network:
+        name: my-try-network
+        subnet: 172.168.10.0/30
+
+- name: Run HTTPD container in custom network
+  hosts: localhost
+  tasks:
+    - name: Start HTTPD container
+      docker_container:
+        name: my-httpd-container
+        image: httpd
+        state: started
+        restart_policy: always
+        network: my-try-network
+        ip_address: 172.168.10.2
