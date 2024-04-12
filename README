@@ -17,3 +17,27 @@ vi {filename.yml}
 
 ###Ensure you have sufficient requirement and python dependensies on all machines#####
 python --version {should be more than 3.0}
+
+
+-------------------------linux-commands--------------------------
+
+
+
+sudo yum install -y yum-utils
+
+sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo 
+
+sudo yum install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+sudo docker run hello-world
+
+docker run -d --name apache -p 80:80 httpd
+
+271b3fdccc0cb15d4bf1f9645663b34e5b50c9499367a199aeb80f3435c9aba6
+
+[root@MyRouter Dockerdeploy]# docker network create my-try-network --subnet=172.168.10.0/30
+
+
+docker network create --subnet=172.168.10.0/30 my-try-network
+
+docker run --name my-httpd-container --network my-try-network--ip 172.168.10.2 -d httpd
