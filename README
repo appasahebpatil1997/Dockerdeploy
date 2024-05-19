@@ -41,3 +41,6 @@ docker run -d --name apache -p 80:80 httpd
 docker network create --subnet=172.168.10.0/30 my-try-network
 
 docker run --name my-httpd-container --network my-try-network--ip 172.168.10.2 -d httpd
+
+
+https://github.com/payloadbox/command-injection-payload-list.git
